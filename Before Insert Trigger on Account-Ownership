@@ -1,0 +1,10 @@
+trigger Ownership on Account (before insert) {
+    
+    If(Trigger.isBefore && Trigger.isInsert){
+        for( account acc : Trigger.new){
+            if( acc.Industry == 'Banking'){
+                acc.Ownership = 'Private';
+            }
+        }
+    }
+}
