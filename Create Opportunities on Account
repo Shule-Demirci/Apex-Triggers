@@ -1,0 +1,30 @@
+trigger CreateOpps on Account (after insert) {
+
+    
+    List<Opportunity> opportunities = new List<Opportunity>();
+    
+    for(Account a : Trigger.new){
+        if(a.Industry == 'Education' && a.Rating == 'Warm'){
+            Opportunity opp = new Opportunity();
+            opp.Name = a.Name;
+            opp.CloseDate = System.today()+15; 
+            opp.Description = 'Created by Trigger';
+            opp.Id = a.Id; 
+           opportunities.add(opp);
+        }
+        
+    }
+    insert opportunities;
+    
+    List<String> recipientList = new List<String>();
+   recipientList.add('sozkan1986@gmail.com');
+    
+    String subject = 'Opp Test Email';
+    String emailBody = 'This is email body.';
+    
+    Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+       email.setToAddresses(recipientList);
+       email.setSubject(subject);
+       email.setPlainTextBody(emailBody);
+       Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
+}
