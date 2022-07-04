@@ -1,0 +1,8 @@
+trigger SampleTrigger on Car__c (before insert, after insert , after update ) {
+	
+    if(Trigger.isAfter && Trigger.isInsert){
+    Car__c[] Cars = Trigger.new;
+    SampleApex.applyDiscount(Cars);
+    }
+    
+}
