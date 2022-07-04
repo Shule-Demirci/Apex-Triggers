@@ -1,0 +1,34 @@
+trigger Homework on Account (before insert, after insert, before update) {
+    
+    
+    
+    if(Trigger.isBefore && Trigger.isInsert){
+        for( account acc : Trigger.new){
+            if( acc.industry == 'Banking'){
+                acc.Ownership = 'Private';
+            }
+        }
+    }
+    if(Trigger.isAfter && Trigger.isInsert){
+    List<Opportunity> OppListToInsert = new List<Opportunity>();
+        for(Account acc : Trigger.New){
+            if(acc.Industry == 'Education' && acc.Rating =='Warm'){
+                opportunity opp = new opportunity();
+                      opp.Name = acc.Name;
+                      opp.CloseDate = System.today() +10; 
+                     opp.StageName = 'Prospecting';
+                opp.AccountId = acc.Id;
+                OppListToInsert.add(opp);
+            }
+        }
+    
+        insert OppListToInsert;
+}
+  if(Trigger.isBefore && Trigger.isUpdate){  
+      for( Account acc1 : Trigger.new){
+          if(acc1.Industry == 'banking'){
+              acc1.Phone = '3615628115';
+          }
+      }   
+}
+}
