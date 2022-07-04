@@ -1,0 +1,45 @@
+trigger AccountTrigger on Account (before insert, after insert) {
+  
+    //After Insert logic to be written in this below block 
+    
+    if(Trigger.isAfter && Trigger.isInsert){
+        
+        
+        List<Contact> conListToInsert = new List<Contact>();//*Bulkification
+        for(Account accRec :  Trigger.new){
+            Contact con = new Contact(); 
+            con.LastName = accRec.Name;
+            con.Accountid = accRec.Id;      //* We need to make this account to be parent of this contact. ID will be created in AfterInsert
+            conListToInsert.add(con);
+            
+        }
+        
+        if(conListToInsert.size()>0)
+                                        //Whenever there is list, check size
+        INSERT conListToInsert;
+  
+    }
+        
+    //Before Insert Logic to be written in this below block 
+    If (Trigger.isBefore && Trigger.isInsert){
+        
+        for(Account accRec : Trigger.new){
+            /*SCENARIO 2*/
+            if(accRec.AnnualRevenue < 1000)
+                accRec.addError('Annual Revenue cannot be less than 1000');
+            
+            
+            /*SCENARIO 1*/
+          if(accRec.ShippingCity==null)
+              accRec.ShippingCity = accRec.BillingCity;
+            if(accRec.ShippingCountry==null)
+                accRec.ShippingCountry = accRec.BillingCountry;
+            if(accRec.ShippingState== null)
+                accRec.ShippingState = accRec.BillingState;
+            if(accRec.ShippingStreet == null)
+                accRec.ShippingStreet = accRec.BillingStreet;
+             if(accRec.ShippingPostalCode == null)
+                accRec.ShippingPostalCode = accRec.BillingPostalCode;
+        }
+    }
+}
