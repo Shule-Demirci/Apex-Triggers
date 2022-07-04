@@ -1,0 +1,12 @@
+trigger AccountOpp on Account (after insert) {
+    
+  List<Opportunity> oppList = new List<Opportunity>();
+   
+        for(Account a : Trigger.new){
+           Opportunity singleOpportunity = New Opportunity();  
+           singleOpportunity.AccountId = a.Id; 
+           oppList.add(new Opportunity(Name = 'Demirci', StageName = 'Closed Won', CloseDate = System.today()+10, AccountId=a.Id));
+    }
+    
+        insert oppList;
+    }
