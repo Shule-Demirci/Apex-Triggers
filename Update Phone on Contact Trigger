@@ -1,0 +1,19 @@
+trigger UpdatePhone on Contact (after insert) {
+
+    List<contact> cons = [Select name, otherphone,AccountId, Account.Phone from Contact where Id In : Trigger.new];
+        List<Contact> UpdatedCons = new List<Contact>();
+        for( Contact c : cons){
+            
+            if(c.OtherPhone != c.Account.phone){
+                
+                c.OtherPhone = c.Account.phone;
+                
+                updatedCons.add(c);
+                
+                
+            }
+        }
+    
+    update updatedCons; 
+    
+}
