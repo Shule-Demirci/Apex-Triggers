@@ -1,0 +1,14 @@
+trigger AfterTriggerExample on Contact (after insert) {
+
+    List<Account> accountsToBeInserted = new List<Account>();
+    for(contact con : Trigger.new) {
+        if(con.AccountId == null){
+            
+            Account acc = new Account();
+            acc.Name = con.LastName;
+            accountsToBeInserted.add(acc);
+            
+        }
+    }
+     insert accountsToBeInserted;
+}
