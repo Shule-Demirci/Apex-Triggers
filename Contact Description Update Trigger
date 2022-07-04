@@ -1,0 +1,17 @@
+trigger ContactUpdate on Account (before update) {
+    
+    List<Contact> updatedList = new List<Contact>();
+    
+    for(Contact c : [Select AccountId,  Description from Contact where AccountId != null]){
+        
+        for(Account a : Trigger.new){
+            if(c.AccountId == a.Id){
+                c.Description = a.Description;
+                updatedList.add(c);
+                
+            }
+            
+        }
+    }
+    update updatedList; 
+}
