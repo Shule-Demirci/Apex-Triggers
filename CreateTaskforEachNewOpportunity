@@ -1,0 +1,12 @@
+trigger Apple on Opportunity (after insert) {
+    if(trigger.isAfter && trigger.isInsert){
+        for(Opportunity opp : Trigger.new){
+            Task newtask   = new Task();
+            newtask.Subject= 'Apple Watch promo';
+            newtask.Description = 'Send them one ASAP';
+            newtask.Priority ='High'; 
+            newtask.WhatId = opp.Id; 
+            insert newtask; 
+        }
+    }
+}
